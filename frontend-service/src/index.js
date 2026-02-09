@@ -55,7 +55,7 @@ app.put('/items/:id', async (req, res) => {
             body: JSON.stringify(req.body)
         });
         if (response.ok) {
-            res.sendStatus(200);
+            res.json({ success: true });
         } else {
             res.status(response.status).json({ error: 'Update failed' });
         }
@@ -72,7 +72,7 @@ app.delete('/items/:id', async (req, res) => {
             method: 'DELETE'
         });
         if (response.ok) {
-            res.sendStatus(200);
+            res.json({ success: true });
         } else {
             res.status(response.status).json({ error: 'Delete failed' });
         }

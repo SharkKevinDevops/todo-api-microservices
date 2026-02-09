@@ -25,7 +25,7 @@ app.put('/items/:id', async (req, res) => {
             name: req.body.name,
             completed: req.body.completed,
         });
-        res.sendStatus(200);
+        res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -34,7 +34,7 @@ app.put('/items/:id', async (req, res) => {
 app.delete('/items/:id', async (req, res) => {
     try {
         await db.removeItem(req.params.id);
-        res.sendStatus(200);
+        res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
