@@ -1,17 +1,13 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: todos
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
     ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
+      - "8000:8000"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,12 +17,13 @@ services:
     ports:
       - "3002:3002"
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_DB: todos
+      DYNAMODB_TABLE: TodoItems
+      AWS_REGION: ap-southeast-1
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_ENDPOINT_URL: http://dynamodb-local:8000
     depends_on:
-      mysql:
+      dynamodb-local:
         condition: service_healthy
 
   todo-read-service:
@@ -34,24 +31,19 @@ services:
     ports:
       - "3001:3001"
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_DB: todos
+      DYNAMODB_TABLE: TodoItems
+      AWS_REGION: ap-southeast-1
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_ENDPOINT_URL: http://dynamodb-local:8000
     depends_on:
-      mysql:
+      dynamodb-local:
         condition: service_healthy
 
   frontend-service:
     build: ./frontend-service
     ports:
       - "3000:3000"
-    environment:
-      READ_SERVICE_URL: http://todo-read-service:3001
-      WRITE_SERVICE_URL: http://todo-write-service:3002
     depends_on:
       - todo-read-service
       - todo-write-service
-
-volumes:
-  mysql-data:
