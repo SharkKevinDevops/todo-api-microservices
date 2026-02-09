@@ -79,4 +79,9 @@ app.delete('/items/:id', async (req, res) => {
     }
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy', service: 'frontend-service' });
+});
+
 app.listen(3000, () => console.log('Frontend Service listening on port 3000'));
