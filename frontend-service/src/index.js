@@ -54,11 +54,8 @@ app.put('/items/:id', async (req, res) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(req.body)
         });
-        if (response.ok) {
-            res.json({ success: true });
-        } else {
-            res.status(response.status).json({ error: 'Update failed' });
-        }
+        const data = await response.json();
+        res.json(data);
     } catch (error) {
         console.error('Error updating item:', error);
         res.status(500).json({ error: error.message });

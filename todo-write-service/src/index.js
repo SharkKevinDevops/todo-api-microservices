@@ -25,7 +25,12 @@ app.put('/items/:id', async (req, res) => {
             name: req.body.name,
             completed: req.body.completed,
         });
-        res.json({ success: true });
+        // Return the updated item
+        res.json({
+            id: req.params.id,
+            name: req.body.name,
+            completed: req.body.completed,
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
