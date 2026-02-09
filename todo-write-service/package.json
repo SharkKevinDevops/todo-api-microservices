@@ -1,0 +1,14 @@
+{
+  "name": "todo-write-service",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.16.1",
+    "uuid": "^13.0.0",
+    "wait-port": "^1.1.0"
+  }
+}
